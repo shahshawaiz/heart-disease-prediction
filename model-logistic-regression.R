@@ -1,22 +1,23 @@
 # dependency prep
   # install.packages("caret", dependencies=c("Depends", "Suggests"))
+  # install.packages("caTools")
   library(caret)
+  library(caTools)
 
-# data import
+  # data import
   dataset <- read.csv("heart.csv")
   dataset$target <- as.factor(dataset$target)
-
-# data splitting
-  validation_index <- createDataPartition(dataset$target, p=0.60, list=FALSE)
-  #test_index <- createDataPartition(dataset$Species, p=0.60, list=FALSE)
   
-  # 
-  validation <- dataset[-validation_index,]
-  #test <- test_index[-test_index,]
-
-  # 
-  dataset <- dataset[validation_index,]
-
+# data splitting
+  split <- sample.split(dataset, SplitRatio=0.6)
+  
+  train <- subset(dataset, split=="TRUE")
+  validation <- subset(dataset, split=="FALSE")
+  
+  split_val <- sample.split(validation, SplitRatio=0.5)
+  validation <- subset(validation, split_val=="TRUE")
+  test <- subset(validation, split_val=="FALSE")
+  
 # pre-data analysis
   
   # dimensins
@@ -67,6 +68,7 @@
 # build  
   # init model
   set.seed(7)
+  # glm: https://www.youtube.com/watch?v=C4N3_XJJ-jU
   glm.fit <- train(target ~ age + sex + cp + trestbps + chol + fbs + restecg + thalach + exang + oldpeak + slope + ca + thal, data = dataset, method="glm", metric=metric, trControl=control)
   
   set.seed(7)

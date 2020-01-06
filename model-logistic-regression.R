@@ -1,6 +1,7 @@
 # dependency prep
   # install.packages("caret", dependencies=c("Depends", "Suggests"))
   # install.packages("caTools")
+  # install.packages("ellipse")
   library(caret)
   library(caTools)
 
@@ -43,7 +44,7 @@
   
   # boxplot
   par(mfrow=c(1,14))
-  for(i in 1:14) {
+  for(i in 1:13) {
     boxplot(x[,i], main=names(dataset)[i])
   }
   
